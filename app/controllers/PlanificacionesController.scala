@@ -10,9 +10,10 @@ object PlanificacionesController extends Controller with JsonWriters {
   val home = PlanificacionesDeLaSemana
 
   private def toJson(planificacion : PlanificacionDto) = Json.toJson(planificacion)
+  private def toJson(planificaciones : List[PlanificacionDto]) = Json.toJson(planificaciones)
 
   def all = CorsAction {
-    Ok("fruta")//toJson(home.all))
+    Ok(toJson(home.all.map(PlanificacionDto.toDto(_))))
   }
 
   def getByDayOfWeek(dayOfWeek: Int) = CorsAction {
