@@ -3,20 +3,26 @@ package controllers
 import play.api.mvc._
 import play.api.libs.json._
 import utils.{JsonWriters, CorsAction}
-import models.Error
-import homes.DummyPlanificacionesHome
+import models.{PlanificacionDto, Error}
+import homes.PlanificacionesDeLaSemana
 
 object PlanificacionesController extends Controller with JsonWriters {
-  val home = new DummyPlanificacionesHome()
+  val home = PlanificacionesDeLaSemana
+
+  private def toJson(planificacion : PlanificacionDto) = Json.toJson(planificacion)
 
   def all = CorsAction {
-    Ok(Json.toJson(home.all))
+    Ok("fruta")//toJson(home.all))
   }
 
-  def getById(id: Long) = CorsAction {
-    home.getById(id) match {
-      case Some(planificacion) => Ok(Json.toJson(planificacion))
-      case None => NotFound(Json.toJson(Error("Not found", s"La planificacion #$id no existe")))
+  def getByDayOfWeek(dayOfWeek: Int) = CorsAction {
+    dayOfWeek match {
+      case x if 0 until 10 contains x => {
+        val planificacion = home.getByDayOfWeek(dayOfWeek)
+        Ok(toJson(planificacion))
+      }
+
+      case _ => BadRequest(Json.toJson(Error("Dia invalido", "El dia de la semana debe ser un numero entre 1 y 7")))
     }
   }
 

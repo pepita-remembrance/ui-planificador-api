@@ -3,5 +3,5 @@
 # ~~~~
 
 # Home page
-GET        /planificaciones            controllers.PlanificacionesController.all
-GET        /planificaciones/:id        controllers.PlanificacionesController.getById(id: Long)
+GET        /planificaciones                   controllers.PlanificacionesController.all
+GET        /planificaciones/:dayOfWeek        controllers.PlanificacionesController.getByDayOfWeek(dayOfWeek: Int)
