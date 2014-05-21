@@ -2,23 +2,19 @@ package controllers
 
 import play.api.mvc._
 import play.api.libs.json._
-import org.joda.time.DateTime
 import utils.{JsonWriters, CorsAction}
-import models.{Error, Planificacion}
+import models.Error
+import homes.DummyPlanificacionesHome
 
 object PlanificacionesController extends Controller with JsonWriters {
-  val planificaciones = Seq(
-    Planificacion(1, "Lunes", DateTime.now(), false),
-    Planificacion(2, "Martes", DateTime.now(), false),
-    Planificacion(3, "Miercoles", DateTime.now(), true)
-  )
+  val home = new DummyPlanificacionesHome()
 
   def all = CorsAction {
-    Ok(Json.toJson(planificaciones))
+    Ok(Json.toJson(home.all))
   }
 
   def getById(id: Long) = CorsAction {
-    planificaciones.find(_.id == id) match {
+    home.getById(id) match {
       case Some(planificacion) => Ok(Json.toJson(planificacion))
       case None => NotFound(Json.toJson(Error("Not found", s"La planificacion #$id no existe")))
     }
